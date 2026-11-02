@@ -1,8 +1,10 @@
-from .behavior import Behavior
-from .food_find import FoodFind
-from .timer import Timer
 import random
-import pygame.math
+
+import pygame
+
+from .behavior import Behavior
+from .timer import Timer
+
 
 class RandomWalk(Behavior):
     def __init__(self, ant) -> None:
@@ -40,4 +42,4 @@ class RandomWalk(Behavior):
 
         found = self.check_food(self.ant.food)
         if found is not None:
-            self.ant.set_behavior(FoodFind(self.ant, found))
+            self.ant.behavior_manager.change("food_find", found=found)

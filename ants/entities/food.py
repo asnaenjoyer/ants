@@ -1,6 +1,4 @@
 import pygame
-import pygame.math
-
 
 
 class Food(pygame.sprite.Sprite):

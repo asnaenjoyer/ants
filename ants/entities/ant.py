@@ -1,8 +1,7 @@
 import pygame
-import pygame.math
 
+from ants.managers import BehaviorManager
 from ants.behaviors.behavior import Behavior
-from ants.behaviors.random_walk import RandomWalk
 from ants.settings import Settings
 
 
@@ -37,24 +36,27 @@ class Ant(pygame.sprite.Sprite):
         self.max_amount = 25
         self.amount = 0
 
-        self.behavior: Behavior = RandomWalk(self)
+        self.behavior_manager : BehaviorManager = BehaviorManager(self) 
+        self.behavior_manager.change("random_walk")
+        self.rotate()
         
     def _check_borders(self):
         if self.position.x - self.rect.width // 2 <= 0 and self.direction.x < 0:
             self.direction.x *= -1
+            self.rotate()
         elif self.position.x + self.rect.width // 2 >= self.settings.window_width and self.direction.x > 0:
             self.direction.x *= -1
+            self.rotate()
         if self.position.y - self.rect.height // 2 <= 0 and self.direction.y < 0:
             self.direction.y *= -1
+            self.rotate()
         elif self.position.y + self.rect.height // 2 >= self.settings.window_height and self.direction.y > 0:
             self.direction.y *= -1
+            self.rotate()
 
     def set_direction(self, direction):
         self.direction = direction
-
-    def set_behavior(self, behavior : Behavior):
-        self.behavior = behavior
-        self.behavior.on_start()
+        self.rotate()
 
     def move(self, delta_time):
         if self.direction.length_squared() > 0:
@@ -81,5 +83,4 @@ class Ant(pygame.sprite.Sprite):
 
 
     def update(self, delta_time):
-        self.behavior.update(delta_time)
-        self.rotate()
+        self.behavior_manager.update(delta_time)

@@ -1,18 +1,22 @@
 from .behavior import Behavior
-from .timer import Timer
-import random
-import pygame.math
+
 
 class TakeHome(Behavior):
-    def __init__(self, ant, nest) -> None:
+    def __init__(self, ant, nest=None) -> None:
         super().__init__(ant)
-        self.nest = nest
+        self.nest = nest if nest is not None else self.ant.nest.sprite
 
     def on_start(self):
         print("Taking Home")
 
     def update(self, delta_time: float):
+        if self.nest is None:
+            return
+
         direction = self.nest.position - self.ant.position
         self.ant.set_direction(direction)
-        self.ant.move(delta_time)
-            
+        if self.ant.position.distance_to(self.nest.position) > 16:
+            self.ant.move(delta_time)
+        else:
+            self.ant.behavior_manager.change("save_food", nest=self.nest)
+

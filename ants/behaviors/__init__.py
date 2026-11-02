@@ -3,6 +3,7 @@ from .food_find import FoodFind
 from .random_walk import RandomWalk
 from .take_food import TakeFood
 from .take_home import TakeHome
+from .save_food import SaveFood
 from .timer import Timer
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "TakeFood",
     "TakeHome",
     "Timer",
+    "SaveFood"
 ]

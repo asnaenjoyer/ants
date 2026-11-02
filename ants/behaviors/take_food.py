@@ -1,8 +1,8 @@
-from .behavior import Behavior
-from .take_home import TakeHome
-from .timer import Timer
 import random
-import pygame.math
+
+from .behavior import Behavior
+from .timer import Timer
+
 
 class TakeFood(Behavior):
     def __init__(self, ant, found) -> None:
@@ -17,5 +17,10 @@ class TakeFood(Behavior):
     def update(self, delta_time: float):
         if self.timer.tick(delta_time):
             free_space = self.ant.max_amount - self.ant.amount
-            self.ant.amount += self.found.take(free_space)
-            self.ant.set_behavior(TakeHome(self.ant, self.ant.nest.sprite))
+            taken = self.found.take(free_space)
+            if taken == 0:
+                self.ant.behavior_manager.change("random_walk")
+                return
+
+            self.ant.amount += taken
+            self.ant.behavior_manager.change("take_home", nest=self.ant.nest.sprite)

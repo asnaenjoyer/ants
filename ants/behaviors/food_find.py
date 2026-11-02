@@ -1,8 +1,5 @@
 from .behavior import Behavior
-from .take_food import TakeFood
-from .timer import Timer
-import random
-import pygame.math
+
 
 class FoodFind(Behavior):
     def __init__(self, ant, found) -> None:
@@ -13,9 +10,13 @@ class FoodFind(Behavior):
         print("Found Food")
 
     def update(self, delta_time: float):
+        if self.found not in self.ant.food:
+            self.ant.behavior_manager.change("random_walk")
+            return
+        
         direction = self.found.position - self.ant.position
         self.ant.set_direction(direction)
-        if (self.ant.position.distance_to(self.found.position) > 16):
+        if self.ant.position.distance_to(self.found.position) > 16:
             self.ant.move(delta_time)
         else:
-            self.ant.set_behavior(TakeFood(self.ant, self.found))
+            self.ant.behavior_manager.change("take_food", found=self.found)

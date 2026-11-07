@@ -1,5 +1,6 @@
 import pygame
 
+from .camera import Camera
 from .entities.ant import Ant
 from .entities.food import Food
 from .entities.nest import Nest
@@ -12,6 +13,10 @@ class Game:
         self.settings = Settings()
         self.screen = pygame.display.set_mode(
             (self.settings.window_width, self.settings.window_height)
+        )
+        self.camera = Camera(
+            (self.settings.window_width, self.settings.window_height),
+            (self.settings.world_width, self.settings.world_height),
         )
         pygame.display.set_caption(self.settings.window_title)
         self.clock = pygame.time.Clock()
@@ -41,6 +46,7 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.is_running = False
+            self.camera.handle_event(event)
 
     def _update(self, delta_time: float) -> None:
         self.ants.update(delta_time)
@@ -49,7 +55,7 @@ class Game:
 
     def _draw(self) -> None:
         self.screen.fill(self.settings.background_color)
-        self.ants.draw(self.screen)
-        self.food.draw(self.screen)
-        self.nest.draw(self.screen)
+        self.camera.draw_group(self.ants, self.screen)
+        self.camera.draw_group(self.food, self.screen)
+        self.camera.draw_group(self.nest, self.screen)
         pygame.display.flip()

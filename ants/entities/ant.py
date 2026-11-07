@@ -61,13 +61,13 @@ class Ant(pygame.sprite.Sprite):
         if self.position.x - self.rect.width // 2 <= 0 and self.direction.x < 0:
             self.direction.x *= -1
             self.rotate()
-        elif self.position.x + self.rect.width // 2 >= self.settings.window_width and self.direction.x > 0:
+        elif self.position.x + self.rect.width // 2 >= self.settings.world_width and self.direction.x > 0:
             self.direction.x *= -1
             self.rotate()
         if self.position.y - self.rect.height // 2 <= 0 and self.direction.y < 0:
             self.direction.y *= -1
             self.rotate()
-        elif self.position.y + self.rect.height // 2 >= self.settings.window_height and self.direction.y > 0:
+        elif self.position.y + self.rect.height // 2 >= self.settings.world_height and self.direction.y > 0:
             self.direction.y *= -1
             self.rotate()
 
@@ -86,8 +86,8 @@ class Ant(pygame.sprite.Sprite):
 
         self.position += self.direction * self.speed * delta_time
         
-        self.position.x = max(half_width, min(self.position.x, self.settings.window_width - half_width))
-        self.position.y = max(half_height, min(self.position.y, self.settings.window_height - half_height))
+        self.position.x = max(half_width, min(self.position.x, self.settings.world_width - half_width))
+        self.position.y = max(half_height, min(self.position.y, self.settings.world_height - half_height))
 
         self.rect.center = (round(self.position.x), round(self.position.y))
 

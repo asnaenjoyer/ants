@@ -22,7 +22,8 @@ class Game:
         self.nest = pygame.sprite.GroupSingle(Nest(600, 400))  # type: ignore[arg-type]
 
         self.ants = pygame.sprite.Group()
-        self.ants.add(Ant(self.settings, self.food, self.nest))
+        for _ in range(2):
+            self.ants.add(Ant(self.settings, self.food, self.nest))
 
         self.is_running = True
 

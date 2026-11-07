@@ -8,12 +8,11 @@ from ants.settings import Settings
 class Ant(pygame.sprite.Sprite):
     COLOR = (75, 45, 35)
 
-    def __init__(self, settings: Settings, food, nest) -> None:
+    def __init__(self, settings: Settings, food_group: pygame.sprite.Group, nest: pygame.sprite.GroupSingle) -> None:
         super().__init__()
         self.settings = settings
 
-        self.food = food
-        self.nest = nest
+        self.food_group = food_group
 
         self.original_image = pygame.Surface((48, 32), pygame.SRCALPHA)
         self.image = self.original_image.copy()
@@ -36,10 +35,28 @@ class Ant(pygame.sprite.Sprite):
         self.max_amount = 25
         self.amount = 0
 
+        self.memory = {"food": None, "nest": nest.sprite}
+
         self.behavior_manager : BehaviorManager = BehaviorManager(self) 
         self.behavior_manager.change("random_walk")
         self.rotate()
-        
+
+    def check_food(self, food_group: pygame.sprite.Group):
+        closest_food = None
+        min_distance = float("inf")
+
+        for food in food_group:
+            distance = self.position.distance_to(food.position)
+
+            if distance < min_distance:
+                min_distance = distance
+                closest_food = food
+
+        if min_distance <= self.detection_radius:
+            return closest_food
+
+        return None
+
     def _check_borders(self):
         if self.position.x - self.rect.width // 2 <= 0 and self.direction.x < 0:
             self.direction.x *= -1
@@ -81,6 +98,10 @@ class Ant(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.original_image, self.look_angle)
         self.rect = self.image.get_rect(center=center)
 
+    def update_memory(self):
+        if self.memory["food"] is not None and self.memory["food"] not in self.food_group:
+            self.memory["food"] = None
 
     def update(self, delta_time):
         self.behavior_manager.update(delta_time)
+        self.memory.update()

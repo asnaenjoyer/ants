@@ -4,7 +4,7 @@ from .behavior import Behavior
 class TakeHome(Behavior):
     def __init__(self, ant, nest=None) -> None:
         super().__init__(ant)
-        self.nest = nest if nest is not None else self.ant.nest.sprite
+        self.nest = nest if nest is not None else self.ant.memory["nest"]
 
     def on_start(self):
         print("Taking Home")

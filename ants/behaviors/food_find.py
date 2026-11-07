@@ -10,7 +10,7 @@ class FoodFind(Behavior):
         print("Found Food")
 
     def update(self, delta_time: float):
-        if self.found not in self.ant.food:
+        if self.found not in self.ant.food_group:
             self.ant.behavior_manager.change("random_walk")
             return
         

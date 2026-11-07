@@ -23,4 +23,4 @@ class TakeFood(Behavior):
                 return
 
             self.ant.amount += taken
-            self.ant.behavior_manager.change("take_home", nest=self.ant.nest.sprite)
+            self.ant.behavior_manager.change("take_home", nest=self.ant.memory["nest"])

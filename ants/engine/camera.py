@@ -30,27 +30,22 @@ class Camera:
             self.offset = world_position - mouse_position / self.zoom
             self._clamp_offset()
 
-    def apply(self, rect: pygame.Rect) -> pygame.Rect:
-        return pygame.Rect(
-            round((rect.x - self.offset.x) * self.zoom),
-            round((rect.y - self.offset.y) * self.zoom),
-            max(1, round(rect.width * self.zoom)),
-            max(1, round(rect.height * self.zoom)),
+    def draw_image(
+        self,
+        image: pygame.Surface,
+        position: tuple[float, float],
+        surface: pygame.Surface,
+    ) -> None:
+        width = max(1, round(image.get_width() * self.zoom))
+        height = max(1, round(image.get_height() * self.zoom))
+        if (width, height) != image.get_size():
+            image = pygame.transform.scale(image, (width, height))
+        rect = image.get_rect(
+            center=(
+                round((position[0] - self.offset.x) * self.zoom),
+                round((position[1] - self.offset.y) * self.zoom),
+            )
         )
-
-    def draw_group(self, group: pygame.sprite.AbstractGroup, surface: pygame.Surface) -> None:
-        for sprite in group.sprites():
-            rect = self.apply(sprite.rect)
-            image = sprite.image
-            if rect.size != image.get_size():
-                image = pygame.transform.scale(image, rect.size)
-            surface.blit(image, rect)
-
-    def draw_sprite(self, sprite: pygame.sprite.Sprite, surface: pygame.Surface) -> None:
-        rect = self.apply(sprite.rect)
-        image = sprite.image
-        if rect.size != image.get_size():
-            image = pygame.transform.scale(image, rect.size)
         surface.blit(image, rect)
 
     def _clamp_offset(self) -> None:

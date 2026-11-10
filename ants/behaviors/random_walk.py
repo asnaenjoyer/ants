@@ -1,9 +1,9 @@
 import random
-
-import pygame
+from math import cos, radians, sin
 
 from .behavior import Behavior
 from .timer import Timer
+from ants.vector import Vector2
 
 
 class RandomWalk(Behavior):
@@ -21,7 +21,8 @@ class RandomWalk(Behavior):
 
         if (self.walk_timer.tick(delta_time)):
             angle = random.uniform(0, 360)
-            direction = pygame.Vector2(1, 0).rotate(angle)
+            angle_radians = radians(angle)
+            direction = Vector2(cos(angle_radians), sin(angle_radians))
             self.ant.set_direction(direction)
             self.walk_timer.set_interval(random.randrange(1, 3))
         self.ant.move(delta_time)

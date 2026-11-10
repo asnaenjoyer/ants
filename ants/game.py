@@ -1,27 +1,28 @@
 import pygame
 
 from .engine.world_renderer import WorldRenderer
+from .engine.world_generator import WorldGenerator
 from .engine.world import World
 from .engine.camera import Camera
 
 from .settings import Settings
 
 
-
 class Game:
     def __init__(self) -> None:
         pygame.init()
         self.settings = Settings()
-        self.screen = pygame.display.set_mode(
-            (self.settings.window_width, self.settings.window_height)
-        )
+        self.screen = pygame.display.set_mode((self.settings.window_width, self.settings.window_height))
         pygame.display.set_caption(self.settings.window_title)
-        self.camera = Camera(
-            (self.settings.window_width, self.settings.window_height),
-            (self.settings.world_width, self.settings.world_height),
-        )
+
+        self.camera = Camera((self.settings.window_width, self.settings.window_height), 
+                             (self.settings.world_width, self.settings.world_height), )
 
         self.world = World(self.settings)
+        
+        self.world_generator = WorldGenerator(self.settings)
+        self.world_generator.generate(self.world)
+
         self.world_renderer = WorldRenderer(self.screen, self.camera, self.settings.background_color)
 
         self.clock = pygame.time.Clock()
@@ -48,6 +49,6 @@ class Game:
         self.world.update(delta_time)
 
     def _draw(self) -> None:
-        self.screen.fill(self.settings.background_color)
+        self.screen.fill((0, 0, 0))
         self.world_renderer.draw(self.world)
         pygame.display.flip()

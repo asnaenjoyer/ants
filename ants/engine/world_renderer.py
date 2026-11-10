@@ -11,8 +11,8 @@ class WorldRenderer:
         self.background_color = background_color
 
     def draw(self, world: World) -> None:
-        self.screen.fill(self.background_color)
+        background_rect = self.camera.apply(world.background.get_rect())
+        self.screen.fill(self.background_color, background_rect)
         self.camera.draw_group(world.ants, self.screen)
         self.camera.draw_group(world.food, self.screen)
         self.camera.draw_group(world.nest, self.screen)
-        pygame.display.flip()

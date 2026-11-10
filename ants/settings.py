@@ -10,3 +10,5 @@ class Settings:
     window_title: str = "Ants"
     fps: int = 60
     background_color: tuple[int, int, int] = (235, 235, 220)
+    num_ants: int = 10
+    num_food: int = 5

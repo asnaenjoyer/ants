@@ -1,5 +1,6 @@
 import pygame
 
+from ants.entities.nest import Nest
 from ants.managers import BehaviorManager
 from ants.behaviors.behavior import Behavior
 from ants.settings import Settings
@@ -8,10 +9,9 @@ from ants.settings import Settings
 class Ant(pygame.sprite.Sprite):
     COLOR = (75, 45, 35)
 
-    def __init__(self, settings: Settings, food_group: pygame.sprite.Group, nest: pygame.sprite.GroupSingle) -> None:
+    def __init__(self, settings: Settings, food_group: pygame.sprite.Group, nest: Nest, pos: pygame.Vector2) -> None:
         super().__init__()
         self.settings = settings
-
         self.food_group = food_group
 
         self.original_image = pygame.Surface((48, 32), pygame.SRCALPHA)
@@ -21,7 +21,7 @@ class Ant(pygame.sprite.Sprite):
         pygame.draw.circle(self.original_image, self.COLOR, (36, 16), 6)
 
         self.rect = self.image.get_rect(
-            center=(settings.window_width // 2, settings.window_height // 2)
+            center=(pos.x, pos.y)
         )
 
         self.position: pygame.Vector2 = pygame.Vector2(self.rect.centerx, self.rect.centery)
@@ -35,7 +35,7 @@ class Ant(pygame.sprite.Sprite):
         self.max_amount = 25
         self.amount = 0
 
-        self.memory = {"food": None, "nest": nest.sprite}
+        self.memory = {"food": None, "nest": nest}
 
         self.behavior_manager : BehaviorManager = BehaviorManager(self) 
         self.behavior_manager.change("random_walk")

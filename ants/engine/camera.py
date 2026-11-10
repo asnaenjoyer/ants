@@ -46,6 +46,13 @@ class Camera:
                 image = pygame.transform.scale(image, rect.size)
             surface.blit(image, rect)
 
+    def draw_sprite(self, sprite: pygame.sprite.Sprite, surface: pygame.Surface) -> None:
+        rect = self.apply(sprite.rect)
+        image = sprite.image
+        if rect.size != image.get_size():
+            image = pygame.transform.scale(image, rect.size)
+        surface.blit(image, rect)
+
     def _clamp_offset(self) -> None:
         visible_width = self.viewport_width / self.zoom
         visible_height = self.viewport_height / self.zoom

@@ -13,6 +13,9 @@ class WorldRenderer:
     def draw(self, world: World) -> None:
         background_rect = self.camera.apply(world.background.get_rect())
         self.screen.fill(self.background_color, background_rect)
-        self.camera.draw_group(world.ants, self.screen)
+        for colony in world.colonies:
+            self.camera.draw_group(colony.ants, self.screen)
         self.camera.draw_group(world.food, self.screen)
-        self.camera.draw_group(world.nest, self.screen)
+        for colony in world.colonies:
+            if colony.nest:
+                self.camera.draw_sprite(colony.nest, self.screen)

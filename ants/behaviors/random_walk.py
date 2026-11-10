@@ -12,9 +12,13 @@ class RandomWalk(Behavior):
         self.walk_timer = Timer(random.randrange(1, 3))
 
     def on_start(self):
-        print("Random Walk")
+        pass
 
     def update(self, delta_time: float):
+        if self.ant.amount > 0:
+            self.ant.behavior_manager.change("take_home", nest=self.ant.memory["nest"])
+            return
+
         if (self.walk_timer.tick(delta_time)):
             angle = random.uniform(0, 360)
             direction = pygame.Vector2(1, 0).rotate(angle)
@@ -23,6 +27,6 @@ class RandomWalk(Behavior):
         self.ant.move(delta_time)
 
         found = self.ant.check_food(self.ant.food_group)
-        if found is not None:
+        if found is not None and found.amount > 0:
             self.ant.memory["food"] = found
             self.ant.behavior_manager.change("food_find", found=found)

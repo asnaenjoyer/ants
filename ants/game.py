@@ -23,6 +23,11 @@ class Game:
         self.world_generator = WorldGenerator(self.settings)
         self.world_generator.generate(self.world)
 
+        if self.world.colonies and self.world.colonies[0].nest is not None:
+            nest_pos = self.world.colonies[0].nest.position
+            self.camera.offset.x = max(0, min(nest_pos.x - self.settings.window_width / 2, self.settings.world_width - self.settings.window_width))
+            self.camera.offset.y = max(0, min(nest_pos.y - self.settings.window_height / 2, self.settings.world_height - self.settings.window_height))
+
         self.world_renderer = WorldRenderer(self.screen, self.camera, self.settings.background_color)
 
         self.clock = pygame.time.Clock()

@@ -15,7 +15,7 @@ class WorldRenderer:
         self.screen.fill(self.background_color, background_rect)
         for colony in world.colonies:
             self.camera.draw_group(colony.ants, self.screen)
-        self.camera.draw_group(world.food, self.screen)
-        for colony in world.colonies:
-            if colony.nest:
+            if colony.nest is not None:
                 self.camera.draw_sprite(colony.nest, self.screen)
+        self.camera.draw_group(world.food, self.screen)
+            

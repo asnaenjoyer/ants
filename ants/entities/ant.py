@@ -32,7 +32,7 @@ class Ant(pygame.sprite.Sprite):
         self.speed = 100
 
         self.detection_radius = 150
-        self.max_amount = 25
+        self.max_amount = 5
         self.amount = 0
 
         self.memory = {"food": None, "nest": nest}
@@ -92,7 +92,10 @@ class Ant(pygame.sprite.Sprite):
         self.rect.center = (round(self.position.x), round(self.position.y))
 
     def rotate(self):
-        self.look_angle = -self.direction.as_polar()[1]
+        if self.direction.length_squared() > 0:
+            self.look_angle = -pygame.Vector2(1, 0).angle_to(self.direction)
+        else:
+            self.look_angle = 0
 
         center = self.rect.center
         self.image = pygame.transform.rotate(self.original_image, self.look_angle)
@@ -103,5 +106,5 @@ class Ant(pygame.sprite.Sprite):
             self.memory["food"] = None
 
     def update(self, delta_time):
+        self.update_memory()
         self.behavior_manager.update(delta_time)
-        self.memory.update()

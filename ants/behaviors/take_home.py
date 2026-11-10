@@ -7,7 +7,7 @@ class TakeHome(Behavior):
         self.nest = nest if nest is not None else self.ant.memory["nest"]
 
     def on_start(self):
-        print("Taking Home")
+        pass
 
     def update(self, delta_time: float):
         if self.nest is None:

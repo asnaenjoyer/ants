@@ -12,7 +12,6 @@ class SaveFood(Behavior):
 
     def on_start(self):
         self.timer = Timer(random.randrange(1, 5))
-        print("Saving Food")
 
     def update(self, delta_time: float):
         if not self.timer.tick(delta_time):
@@ -21,9 +20,9 @@ class SaveFood(Behavior):
         if self.ant.amount > 0:
             deposited = self.nest.deposit(self.ant.amount)
             self.ant.amount -= deposited
-            print(f"Deposited {deposited} food. Ant now has {self.ant.amount} food.")
 
-        if self.ant.memory["food"] is not None:
-            self.ant.behavior_manager.change("food_find", found=self.ant.memory["food"])
+        self.ant.memory["food"] = None
+        if self.ant.amount > 0:
+            self.ant.behavior_manager.change("take_home", nest=self.ant.memory["nest"])
         else:
             self.ant.behavior_manager.change("random_walk")

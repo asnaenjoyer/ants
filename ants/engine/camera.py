@@ -1,4 +1,5 @@
 import pygame
+from pygame import surface
 
 
 class Camera:
@@ -53,6 +54,13 @@ class Camera:
             image = pygame.transform.scale(image, rect.size)
         surface.blit(image, rect)
 
+    def draw_surface(self, image: pygame.Surface, position: tuple[int, int], surface: pygame.Surface) -> None:
+        rect = self.apply(image.get_rect(topleft=position))
+        scaled_image = pygame.transform.scale(image, rect.size)
+        surface.blit(scaled_image, rect)
+
+
+    
     def _clamp_offset(self) -> None:
         visible_width = self.viewport_width / self.zoom
         visible_height = self.viewport_height / self.zoom

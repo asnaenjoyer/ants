@@ -26,7 +26,8 @@ class Game:
         self.world_renderer = WorldRenderer(self.screen, self.camera, self.settings.background_color)
 
         self.clock = pygame.time.Clock()
-
+        self.fps_update_timer = 0.0
+        
         self.is_running = True
 
     def run(self) -> None:
@@ -47,6 +48,12 @@ class Game:
 
     def _update(self, delta_time: float) -> None:
         self.world.update(delta_time)
+
+        self.fps_update_timer += delta_time
+        if self.fps_update_timer >= 0.5:
+            fps = self.clock.get_fps()
+            pygame.display.set_caption(f"{self.settings.window_title} | FPS: {fps:.0f}")
+            self.fps_update_timer = 0.0
 
     def _draw(self) -> None:
         self.screen.fill((0, 0, 0))

@@ -9,11 +9,6 @@ class Settings:
     fps: int = 60
     background_color: tuple[int, int, int] = (235, 235, 220)
 
-
     world_width: int = 1600
     world_height: int = 1200
-
-    num_ants: int = 5
-    num_food: int = 5
-    food_amount: int = 500
-    nest_max_amount: int = 1000
+    unit_size: int = 8

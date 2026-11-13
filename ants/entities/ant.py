@@ -86,6 +86,26 @@ class Ant(pygame.sprite.Sprite):
 
         self.last_pheromone_position = self.position.copy()
 
+    def follow_pheromone(self, delta_time: float) -> bool:
+        right = self.sensors[0].concentration
+        center = self.sensors[1].concentration
+        left = self.sensors[2].concentration
+
+        max_concentration = max(left, center, right)
+
+        if max_concentration < 1.0:
+            return False
+
+        steering = (left - right) / max_concentration
+
+        if abs(steering) < 0.15:
+            steering = 0
+
+        self.direction.rotate_ip(steering * 60.0 * delta_time)
+        self.direction.normalize_ip()
+
+        return True
+
     def update_image(self) -> None:
         angle = pygame.Vector2(1, 0).angle_to(self.direction)
         self.image = pygame.transform.rotate(self.original_image, -angle)
@@ -98,9 +118,27 @@ class Ant(pygame.sprite.Sprite):
         for sensor in self.sensors:
             sensor.update(self.position, self.direction, self.pheromone_field, self.state.target_pheromone_type)
 
+    def avoid_bounds(self):
+        margin = 60
+
+        if self.position.x < margin and self.direction.x < 0:
+            self.direction.x = abs(self.direction.x)
+
+        elif self.position.x > self.settings.world_width - margin and self.direction.x > 0:
+            self.direction.x = -abs(self.direction.x)
+
+        if self.position.y < margin and self.direction.y < 0:
+            self.direction.y = abs(self.direction.y)
+
+        elif self.position.y > self.settings.world_height - margin and self.direction.y > 0:
+            self.direction.y = -abs(self.direction.y)
+
+        self.direction.normalize_ip()
+
     def update(self, delta_time: float) -> None: 
-        self.state.update(delta_time)
-        self.move(delta_time)
         self.update_sensors()
+        self.state.update(delta_time)
+        self.avoid_bounds()
+        self.move(delta_time)
         self.emit_pheromone()
         self.update_image()

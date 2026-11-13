@@ -43,30 +43,6 @@ class WorldRenderer:
         self.draw_pheromone_grid(world, PheromoneType.RED, (255, 40, 40))
         self.draw_pheromone_grid(world, PheromoneType.BLUE, (40, 100, 255))
 
-    def draw_sensors(self, world):
-        for ant in world.ants:
-            for sensor in ant.sensors:
-                concentration = sensor.concentration
-                intensity = min(1.0, concentration / world.pheromone_field.max_concentration)
-
-                base_color = (
-                    (255, 40, 40)
-                    if ant.state.target_pheromone_type == PheromoneType.RED
-                    else (40, 100, 255)
-                )
-
-                color = tuple(
-                    int(60 + (channel - 60) * intensity)
-                    for channel in base_color
-                )
-
-                radius = max(2, int(sensor.radius * self.camera.zoom))
-                position = self.camera.apply(
-                    pygame.Rect(sensor.position.x, sensor.position.y, 0, 0)
-                ).topleft
-
-                pygame.draw.circle(self.screen, color, position, radius)
-                pygame.draw.circle(self.screen, (255, 255, 255), position, radius, 1)
         
 
     def draw(self, world: World) -> None:
@@ -74,7 +50,6 @@ class WorldRenderer:
         self.screen.fill(self.background_color, background_rect)
 
         self.draw_pheromones(world)
-        self.draw_sensors(world)
         self.camera.draw_group(world.food, self.screen)
 
         if world.nest:

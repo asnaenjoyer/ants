@@ -11,6 +11,6 @@ class Food(pygame.sprite.Sprite):
         pygame.draw.ellipse(self.image, self.COLOR, (0, 0, unit_size, unit_size))
 
         self.rect = self.image.get_rect(center=(x, y))
-        self.hitbox = self.rect.inflate(20, 20)
+        self.hitbox = self.rect
         self.position: pygame.Vector2 = pygame.Vector2(self.rect.centerx, self.rect.centery)
         

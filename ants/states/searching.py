@@ -7,11 +7,34 @@ class Searching(AntState):
         super().__init__(ant)
         self.pheromone_type = PheromoneType.BLUE
         self.target_pheromone_type = PheromoneType.RED
-        print("Ant is now searching for food.")
 
     def update(self, delta_time: float) -> None:
+        food = self.find_food()
+
+        if food:
+            direction = food.position - self.ant.position
+
+            if direction.length() > 0:
+                self.ant.direction = direction.normalize()
+        else:
+            self.ant.random_walk.update(self.ant.direction, delta_time)
+
         self.check_for_food()
-        self.ant.random_walk.update(self.ant.direction, delta_time)
+
+
+    def find_food(self):
+        closest_food = None
+        min_distance = self.ant.settings.food_detection_radius
+
+        for food in self.ant.food_group:
+            distance = self.ant.position.distance_to(food.position)
+
+            if distance < min_distance:
+                min_distance = distance
+                closest_food = food
+
+        return closest_food
+
 
     def check_for_food(self) -> None:
         for food in self.ant.food_group:

@@ -18,29 +18,29 @@ class WorldGenerator:
             self.settings.world_height // 2,
             self.settings.unit_size
         )
-
-        world.ants.add(Ant(
-            world.food,
-            world.nest,
-            pygame.Vector2(self.settings.world_width // 2, self.settings.world_height // 2),
-            world.pheromone_field,
-            self.settings
-        ))
+        for _ in range(200):
+            world.ants.add(Ant(
+                world.food,
+                world.nest,
+                pygame.Vector2(self.settings.world_width // 2, self.settings.world_height // 2),
+                world.pheromone_field,
+                self.settings
+            ))
 
     def _generate_food(self, world):
         margin = 32
         cluster_count = 5
-        cluster_radius = 70
+        cluster_radius = 110
 
         for _ in range(cluster_count):
             center_x = random.randint(margin, self.settings.world_width - margin)
             center_y = random.randint(margin, self.settings.world_height - margin)
 
-            food_count = random.randint(8, 14)
+            food_count = 164
 
             for _ in range(food_count):
-                x = int(random.gauss(center_x, cluster_radius / 2))
-                y = int(random.gauss(center_y, cluster_radius / 2))
+                x = int(random.gauss(center_x, cluster_radius / 2.5))
+                y = int(random.gauss(center_y, cluster_radius / 2.5))
 
                 x = max(margin, min(x, self.settings.world_width - margin))
                 y = max(margin, min(y, self.settings.world_height - margin))
